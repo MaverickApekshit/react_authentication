@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import MainNavigation from "../components/MainNavigation";
+import { getTokenDuration } from "../util/auth";
 
 function RootLayout() {
   // const navigation = useNavigation();
@@ -18,9 +19,17 @@ function RootLayout() {
       return;
     }
 
+    if (token === "EXPIRED") {
+      submit(null, { action: "/logout", method: "post" });
+      return;
+    }
+
+    const tokenDuration = getTokenDuration();
+    console.log(tokenDuration);
+
     setTimeout(() => {
       submit(null, { action: "/logout", method: "post" });
-    }, 1 * 60 * 60 * 1000);
+    }, tokenDuration);
   }, [token, submit]);
 
   return (
